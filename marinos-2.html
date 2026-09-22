@@ -85,8 +85,8 @@ function openNew(){
  $("modalTitle").textContent="新規追加";
  $("id").value="";
  ["date","match","name","product","price","note"].forEach(x=>$(x).value="");
- $("status").value="交換予定";
- $("type").value="交換";
+ $("status").value="取引予定";
+ $("type").value="取引";
  dlg.showModal();
 }
 
@@ -130,7 +130,7 @@ function remove(id){
 }
 
 function fmt(d){
- if(!d)return "交換日未設定";
+ if(!d)return "取引日未設定";
  const a=d.split("-");
  return `${a[0]}/${Number(a[1])}/${Number(a[2])}`
 }
