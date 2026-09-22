@@ -43,8 +43,8 @@ dialog::backdrop{background:#0006}.modal{padding:18px}
 <div class="toolbar">
 <button class="add" onclick="openNew()">＋ 新規追加</button>
 <select class="sort" id="sort" onchange="render()" aria-label="並び順">
-<option value="status">交換予定 → 完了</option>
-<option value="statusReverse">完了 → 交換予定</option>
+<option value="status">取引予定 → 完了</option>
+<option value="statusReverse">完了 → 取引予定</option>
 <option value="date">交換日が近い順</option>
 <option value="dateReverse">交換日が遠い順</option>
 </select>
@@ -53,7 +53,7 @@ dialog::backdrop{background:#0006}.modal{padding:18px}
 <form method="dialog" class="modal" id="form">
 <h2 id="modalTitle">新規追加</h2>
 <input type="hidden" id="id"><div class="field"><label>状態</label>
-<select id="status"><option>交換予定</option><option>完了</option></select></div><div class="field"><label>交換日</label>
+<select id="status"><option>取引予定</option><option>完了</option></select></div><div class="field"><label>取引日</label>
 <input id="date" type="date"></div><div class="field"><label>試合</label>
 <input id="match" placeholder="例：鹿島戦"></div><div class="field"><label>相手の名前</label>
 <input id="name" placeholder="Xのアカウント名など"></div><div class="field"><label>商品名</label>
