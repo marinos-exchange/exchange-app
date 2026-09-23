@@ -1,193 +1,774 @@
 <!doctype html>
-
 <html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b6fb8">
 <link rel="manifest" href="manifest.json">
+
 <title>グッズ交換管理</title>
+
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;color:#17324d;background:#f4f7fa}
-*{box-sizing:border-box} body{margin:0}
-header{background:#0b6fb8;color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:5}
-h1{font-size:21px;margin:0 0 12px;font-weight:800}
-.toolbar{display:flex;gap:8px;align-items:center}
-button,select,input{font:inherit}
-button{border:0;border-radius:10px;padding:11px 14px;font-weight:700}
-.add{background:#fff;color:#0b6fb8}.sort{background:#ffffff22;color:#fff;border:1px solid #ffffff66}
-main{padding:14px;max-width:720px;margin:auto}
-.card{background:#fff;border:2px solid transparent;border-radius:14px;padding:14px;margin-bottom:11px;box-shadow:0 2px 8px #1232}
-.card.done{border-color:#e53935}
-.row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.status{font-size:12px;font-weight:800;padding:5px 8px;border-radius:999px;background:#e8f3fb;color:#0b6fb8}
-.done .status{background:#ffe9e9;color:#d52222}
-.name{font-size:18px;font-weight:800}.meta{font-size:13px;color:#60758a;margin-top:5px}
-.product{font-size:16px;font-weight:700;margin-top:10px}
-.price{font-weight:800;margin-top:7px}
-.actions{display:flex;gap:7px;margin-top:12px}.actions button{background:#eef3f7;color:#315066}
-.empty{text-align:center;color:#70879a;padding:50px 10px}
-dialog{border:0;border-radius:18px;width:min(92vw,560px);padding:0;box-shadow:0 15px 50px #0004}
-dialog::backdrop{background:#0006}.modal{padding:18px}
-.modal h2{margin:0 0 14px;font-size:20px}
-.field{margin:11px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:5px;color:#526b80}
-.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #c9d5df;border-radius:9px;background:#fff;font:inherit}
-.field textarea{min-height:90px;resize:vertical}
-.form-actions{display:flex;gap:8px;margin-top:16px}.form-actions button{flex:1}
-.save{background:#0b6fb8;color:#fff}.cancel{background:#edf2f5}
+:root{
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;
+  color:#17324d;
+  background:#f4f7fa
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0
+}
+
+header{
+  background:#0b6fb8;
+  color:#fff;
+  padding:18px 16px 14px;
+  position:sticky;
+  top:0;
+  z-index:5
+}
+
+h1{
+  font-size:21px;
+  margin:0 0 12px;
+  font-weight:800
+}
+
+.toolbar{
+  display:flex;
+  gap:8px;
+  align-items:center
+}
+
+button,select,input{
+  font:inherit
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:11px 14px;
+  font-weight:700
+}
+
+.add{
+  background:#fff;
+  color:#0b6fb8
+}
+
+.sort{
+  background:#ffffff22;
+  color:#fff;
+  border:1px solid #ffffff66
+}
+
+main{
+  padding:14px;
+  max-width:720px;
+  margin:auto
+}
+
+.card{
+  background:#fff;
+  border:2px solid transparent;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:11px;
+  box-shadow:0 2px 8px #1232
+}
+
+.card.done{
+  border-color:#e53935
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start
+}
+
+.name{
+  font-size:18px;
+  font-weight:800
+}
+
+.meta{
+  font-size:13px;
+  color:#60758a;
+  margin-top:5px
+}
+
+.product{
+  font-size:16px;
+  font-weight:700;
+  margin-top:10px
+}
+
+.price{
+  font-weight:800;
+  margin-top:7px
+}
+
+/* 取引内容バッジ */
+.trade-badge{
+  flex-shrink:0;
+  font-size:13px;
+  font-weight:800;
+  padding:7px 10px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  white-space:nowrap
+}
+
+.trade-exchange{
+  background:#e3f2fd;
+  color:#0877bd
+}
+
+.trade-buy{
+  background:#dcf8e9;
+  color:#078443
+}
+
+.trade-gift{
+  background:#eee1ff;
+  color:#7035c8
+}
+
+.trade-done{
+  background:#ffe1e1;
+  color:#e53935
+}
+
+/* Xリンク */
+.x-link{
+  display:inline-block;
+  margin-top:10px;
+  padding:8px 11px;
+  border-radius:8px;
+  background:#eef3f7;
+  color:#17324d;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700
+}
+
+.x-link:active{
+  opacity:.7
+}
+
+.actions{
+  display:flex;
+  gap:7px;
+  margin-top:12px
+}
+
+.actions button{
+  background:#eef3f7;
+  color:#315066
+}
+
+.empty{
+  text-align:center;
+  color:#70879a;
+  padding:50px 10px
+}
+
+dialog{
+  border:0;
+  border-radius:18px;
+  width:min(92vw,560px);
+  padding:0;
+  box-shadow:0 15px 50px #0004
+}
+
+dialog::backdrop{
+  background:#0006
+}
+
+.modal{
+  padding:18px
+}
+
+.modal h2{
+  margin:0 0 14px;
+  font-size:20px
+}
+
+.field{
+  margin:11px 0
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:5px;
+  color:#526b80
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #c9d5df;
+  border-radius:9px;
+  background:#fff;
+  font:inherit
+}
+
+.field textarea{
+  min-height:90px;
+  resize:vertical
+}
+
+.url-help{
+  font-size:12px;
+  color:#70879a;
+  margin-top:5px;
+  line-height:1.5
+}
+
+.form-actions{
+  display:flex;
+  gap:8px;
+  margin-top:16px
+}
+
+.form-actions button{
+  flex:1
+}
+
+.save{
+  background:#0b6fb8;
+  color:#fff
+}
+
+.cancel{
+  background:#edf2f5
+}
 </style>
 </head>
+
 <body>
+
 <header>
-<h1>⚽グッズス交換管理</h1>
+
+<h1>⚽グッズ交換管理</h1>
+
 <div class="toolbar">
-<button class="add" onclick="openNew()">＋ 新規追加</button>
+
+<button class="add" onclick="openNew()">
+＋ 新規追加
+</button>
+
 <select class="sort" id="sort" onchange="render()" aria-label="並び順">
 <option value="status">取引予定 → 完了</option>
 <option value="statusReverse">完了 → 取引予定</option>
 <option value="date">取引日が近い順</option>
 <option value="dateReverse">取引日が遠い順</option>
 </select>
+
 </div>
-</header><main id="list"></main><dialog id="dlg">
+</header>
+
+<main id="list"></main>
+
+<dialog id="dlg">
+
 <form method="dialog" class="modal" id="form">
+
 <h2 id="modalTitle">新規追加</h2>
-<input type="hidden" id="id"><div class="field"><label>状態</label>
-<select id="status"><option>取引予定</option><option>完了</option></select></div><div class="field"><label>取引日</label>
-<input id="date" type="date"></div><div class="field"><label>試合</label>
-<input id="match" placeholder="例：鹿島戦"></div><div class="field"><label>相手の名前</label>
-<input id="name" placeholder="Xのアカウント名など"></div><div class="field"><label>商品名</label>
-<input id="product" placeholder="例：宮市 23"></div><div class="field"><label>交換・買取・譲渡</label>
+
+<input type="hidden" id="id">
+
+<div class="field">
+<label>状態</label>
+<select id="status">
+<option>取引予定</option>
+<option>完了</option>
+</select>
+</div>
+
+<div class="field">
+<label>取引日</label>
+<input id="date" type="date">
+</div>
+
+<div class="field">
+<label>試合</label>
+<input id="match" placeholder="例：鹿島戦">
+</div>
+
+<div class="field">
+<label>相手の名前</label>
+<input id="name" placeholder="Xのアカウント名など">
+</div>
+
+<div class="field">
+<label>商品名</label>
+<input id="product" placeholder="例：宮市 23">
+</div>
+
+<div class="field">
+<label>交換・買取・譲渡</label>
 <select id="type">
 <option>交換</option>
 <option>買取</option>
 <option>譲渡</option>
 </select>
-</div><div class="field"><label>金額</label>
-<input id="price" type="number" inputmode="numeric" min="0" placeholder="買取時のみ"></div><div class="field"><label>備考</label>
-<textarea id="note" placeholder="その他メモなど"></textarea></div><div class="form-actions">
-<button type="button" class="cancel" onclick="dlg.close()">キャンセル</button>
-<button type="submit" class="save">保存</button>
 </div>
+
+<div class="field">
+<label>金額</label>
+<input
+  id="price"
+  type="number"
+  inputmode="numeric"
+  min="0"
+  placeholder="買取時のみ">
+</div>
+
+<div class="field">
+<label>備考</label>
+<textarea
+  id="note"
+  placeholder="その他メモなど"></textarea>
+</div>
+
+<div class="field">
+<label>取引元ポスト（Xでのやり取り）</label>
+
+<input
+  id="postUrl"
+  type="url"
+  placeholder="https://x.com/...">
+
+<div class="url-help">
+※Xのポストで「共有」→「リンクをコピー」でURLを取得できます。
+</div>
+
+</div>
+
+<div class="form-actions">
+
+<button
+  type="button"
+  class="cancel"
+  onclick="dlg.close()">
+キャンセル
+</button>
+
+<button
+  type="submit"
+  class="save">
+保存
+</button>
+
+</div>
+
 </form>
-</dialog><script>
+
+</dialog>
+
+<script>
+
 const KEY="marinos_exchange_v1";
+
 const dlg=document.getElementById("dlg");
-let items=JSON.parse(localStorage.getItem(KEY)||"[]");
+
+let items=JSON.parse(
+  localStorage.getItem(KEY)||"[]"
+);
+
 const $=id=>document.getElementById(id);
 
+
+/* 保存 */
 function saveAll(){
- localStorage.setItem(KEY,JSON.stringify(items));
- render()
+
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(items)
+  );
+
+  render();
 }
 
+
+/* 新規追加 */
 function openNew(){
- $("modalTitle").textContent="新規追加";
- $("id").value="";
- ["date","match","name","product","price","note"].forEach(x=>$(x).value="");
- $("status").value="取引予定";
- $("type").value="取引";
- dlg.showModal();
+
+  $("modalTitle").textContent="新規追加";
+
+  $("id").value="";
+
+  [
+    "date",
+    "match",
+    "name",
+    "product",
+    "price",
+    "note",
+    "postUrl"
+  ].forEach(x=>{
+    $(x).value="";
+  });
+
+  $("status").value="取引予定";
+
+  $("type").value="交換";
+
+  dlg.showModal();
 }
 
+
+/* 編集 */
 function edit(id){
- const x=items.find(v=>v.id===id);
- if(!x)return;
- $("modalTitle").textContent="編集";
- $("id").value=x.id;
- ["status","date","match","name","product","type","price","note"].forEach(k=>$(k).value=x[k]||"");
- dlg.showModal();
+
+  const x=items.find(v=>v.id===id);
+
+  if(!x)return;
+
+  $("modalTitle").textContent="編集";
+
+  $("id").value=x.id;
+
+  $("status").value=x.status||"取引予定";
+  $("date").value=x.date||"";
+  $("match").value=x.match||"";
+  $("name").value=x.name||"";
+  $("product").value=x.product||"";
+  $("type").value=x.type||"交換";
+  $("price").value=x.price||"";
+  $("note").value=x.note||"";
+  $("postUrl").value=x.postUrl||"";
+
+  dlg.showModal();
 }
 
+
+/* 保存ボタン */
 $("form").addEventListener("submit",e=>{
- e.preventDefault();
 
- const data={
-  id:$("id").value||Date.now().toString(),
-  status:$("status").value,
-  date:$("date").value,
-  match:$("match").value.trim(),
-  name:$("name").value.trim(),
-  product:$("product").value.trim(),
-  type:$("type").value,
-  price:$("price").value,
-  note:$("note").value.trim()
- };
+  e.preventDefault();
 
- const i=items.findIndex(v=>v.id===data.id);
- if(i>=0)items[i]=data;
- else items.push(data);
+  const data={
 
- saveAll();
- dlg.close();
+    id:$("id").value||Date.now().toString(),
+
+    status:$("status").value,
+
+    date:$("date").value,
+
+    match:$("match").value.trim(),
+
+    name:$("name").value.trim(),
+
+    product:$("product").value.trim(),
+
+    type:$("type").value,
+
+    price:$("price").value,
+
+    note:$("note").value.trim(),
+
+    postUrl:$("postUrl").value.trim()
+
+  };
+
+
+  const i=items.findIndex(
+    v=>v.id===data.id
+  );
+
+
+  if(i>=0){
+
+    items[i]=data;
+
+  }else{
+
+    items.push(data);
+
+  }
+
+
+  saveAll();
+
+  dlg.close();
+
 });
 
+
+/* 削除 */
 function remove(id){
- if(confirm("この交換情報を削除しますか？")){
-  items=items.filter(v=>v.id!==id);
-  saveAll()
- }
+
+  if(
+    confirm("この取引情報を削除しますか？")
+  ){
+
+    items=items.filter(
+      v=>v.id!==id
+    );
+
+    saveAll();
+
+  }
+
 }
 
+
+/* 日付表示 */
 function fmt(d){
- if(!d)return "取引日未設定";
- const a=d.split("-");
- return `${a[0]}/${Number(a[1])}/${Number(a[2])}`
+
+  if(!d)return "取引日未設定";
+
+  const a=d.split("-");
+
+  return `${a[0]}/${Number(a[1])}/${Number(a[2])}`;
+
 }
 
+
+/* 取引内容バッジ */
+function tradeBadge(x){
+
+  /* 完了なら取引種別ではなく「完了」 */
+  if(x.status==="完了"){
+
+    return `
+      <span class="trade-badge trade-done">
+        ✓ 完了
+      </span>
+    `;
+
+  }
+
+
+  if(x.type==="買取"){
+
+    return `
+      <span class="trade-badge trade-buy">
+        ¥ 買取
+      </span>
+    `;
+
+  }
+
+
+  if(x.type==="譲渡"){
+
+    return `
+      <span class="trade-badge trade-gift">
+        🎁 譲渡
+      </span>
+    `;
+
+  }
+
+
+  return `
+    <span class="trade-badge trade-exchange">
+      ⇄ 交換
+    </span>
+  `;
+
+}
+
+
+/* 一覧表示 */
 function render(){
- const mode=$("sort").value, a=[...items];
 
- if(mode==="status")a.sort((x,y)=>(x.status==="完了")-(y.status==="完了"));
- if(mode==="statusReverse")a.sort((x,y)=>(x.status!=="完了")-(y.status!=="完了"));
- if(mode==="date")a.sort((x,y)=>(x.date||"9999").localeCompare(y.date||"9999"));
- if(mode==="dateReverse")a.sort((x,y)=>(y.date||"").localeCompare(x.date||""));
+  const mode=$("sort").value;
 
- const list=$("list");
+  const a=[...items];
 
- if(!a.length){
-  list.innerHTML='<div class="empty">まだ交換情報がありません。<br>「＋ 新規追加」から登録してください。</div>';
-  return
- }
 
- list.innerHTML=a.map(x=>`
- <article class="card ${x.status==="完了"?"done":""}">
-  <div class="row">
-   <div>
-    <div class="name">${esc(x.name)||"相手未入力"}</div>
-    <div class="meta">${fmt(x.date)}　${esc(x.match)||"試合未入力"}</div>
-   </div>
-   <span class="status">${x.status}</span>
-  </div>
+  /* 並び順 */
 
-  <div class="product">${esc(x.product)||"商品名未入力"}</div>
+  if(mode==="status"){
 
-  <div class="meta">
-   ${x.type}${x.type==="買取"&&x.price?`　${Number(x.price).toLocaleString()}円`:""}
-  </div>
+    a.sort(
+      (x,y)=>
+        (x.status==="完了")-
+        (y.status==="完了")
+    );
 
-  ${x.note?`<div class="meta">備考：${esc(x.note)}</div>`:""}
+  }
 
-  <div class="actions">
-   <button onclick="edit('${x.id}')">編集</button>
-   <button onclick="remove('${x.id}')">削除</button>
-  </div>
- </article>`).join("");
+
+  if(mode==="statusReverse"){
+
+    a.sort(
+      (x,y)=>
+        (x.status!=="完了")-
+        (y.status!=="完了")
+    );
+
+  }
+
+
+  if(mode==="date"){
+
+    a.sort(
+      (x,y)=>
+        (x.date||"9999").localeCompare(
+          y.date||"9999"
+        )
+    );
+
+  }
+
+
+  if(mode==="dateReverse"){
+
+    a.sort(
+      (x,y)=>
+        (y.date||"").localeCompare(
+          x.date||""
+        )
+    );
+
+  }
+
+
+  const list=$("list");
+
+
+  if(!a.length){
+
+    list.innerHTML=
+      '<div class="empty">まだ取引情報がありません。<br>「＋ 新規追加」から登録してください。</div>';
+
+    return;
+
+  }
+
+
+  list.innerHTML=a.map(x=>`
+
+    <article class="card ${x.status==="完了"?"done":""}">
+
+      <div class="row">
+
+        <div>
+
+          <div class="name">
+            ${esc(x.name)||"相手未入力"}
+          </div>
+
+          <div class="meta">
+            ${fmt(x.date)}
+            　
+            ${esc(x.match)||"試合未入力"}
+          </div>
+
+        </div>
+
+        ${tradeBadge(x)}
+
+      </div>
+
+
+      <div class="product">
+        ${esc(x.product)||"商品名未入力"}
+      </div>
+
+
+      <div class="meta">
+
+        ${esc(x.type)}
+
+        ${
+          x.type==="買取" && x.price
+          ?`　${Number(x.price).toLocaleString()}円`
+          :""
+        }
+
+      </div>
+
+
+      ${
+        x.note
+        ?`<div class="meta">
+            備考：${esc(x.note)}
+          </div>`
+        :""
+      }
+
+
+      ${
+        x.postUrl
+        ?`
+          <a
+            class="x-link"
+            href="${esc(x.postUrl)}"
+            target="_blank"
+            rel="noopener noreferrer">
+            🔗 Xでのやり取りを開く
+          </a>
+        `
+        :""
+      }
+
+
+      <div class="actions">
+
+        <button onclick="edit('${x.id}')">
+          編集
+        </button>
+
+        <button onclick="remove('${x.id}')">
+          削除
+        </button>
+
+      </div>
+
+    </article>
+
+  `).join("");
+
 }
 
+
+/* HTMLエスケープ */
 function esc(s){
- return String(s??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- }[c]))
+
+  return String(s??"").replace(
+    /[&<>"']/g,
+    c=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c])
+  );
+
 }
 
+
+/* 初回表示 */
 render();
 
-if("serviceWorker" in navigator)
- navigator.serviceWorker.register("sw.js").catch(()=>{});
-</script></body>
+
+/* Service Worker */
+if("serviceWorker" in navigator){
+
+  navigator.serviceWorker
+    .register("sw.js")
+    .catch(()=>{});
+
+}
+
+</script>
+
+</body>
 </html>
