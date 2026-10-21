@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ja">
 <head>
@@ -265,18 +266,21 @@ function render(){
   const mode=$("sort").value;
   const a=[...items];
 
-  if(mode==="status"){
-    a.sort((x,y)=>(x.status==="完了")-(y.status==="完了"));
-  }
-  if(mode==="statusReverse"){
-    a.sort((x,y)=>(x.status!=="完了")-(y.status!=="完了"));
-  }
-  if(mode==="date"){
-    a.sort((x,y)=>(x.date||"9999").localeCompare(y.date||"9999"));
-  }
-  if(mode==="dateReverse"){
-    a.sort((x,y)=>(y.date||"").localeCompare(x.date||""));
-  }
+  // 完了していない取引を先に、完了を必ず一番下に表示
+  a.sort((x,y)=>{
+    const xDone=x.status==="完了";
+    const yDone=y.status==="完了";
+
+    if(xDone!==yDone) return xDone?1:-1;
+
+    // 同じ状態の取引は、選択された並び順で整理
+    if(mode==="dateReverse"){
+      return (y.date||"").localeCompare(x.date||"");
+    }
+
+    // 既定は日付が近い順
+    return (x.date||"9999").localeCompare(y.date||"9999");
+  });
 
   const list=$("list");
 
